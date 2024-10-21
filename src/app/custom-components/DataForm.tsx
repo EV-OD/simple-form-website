@@ -25,7 +25,6 @@ export default function DataForm({ onClose }: DataFormProps) {
     grandfatherName: "",
     grandmotherName: "",
   });
-
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +32,7 @@ export default function DataForm({ onClose }: DataFormProps) {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleDateChange = (date: string) => {
+  const handleNepaliDateChange = (date: string) => {
     setFormData((prevData) => ({ ...prevData, dob: date }));
   };
 
@@ -42,8 +41,7 @@ export default function DataForm({ onClose }: DataFormProps) {
     setLoading(true);
 
     try {
-      // Add form data to Firestore
-      await addDoc(collection(db, "familyMemberData"), {
+      await addDoc(collection(db, "familyMembersData"), {
         serialNumber: formData.serialNumber,
         name: formData.name,
         address: formData.address,
@@ -56,7 +54,6 @@ export default function DataForm({ onClose }: DataFormProps) {
         grandfatherName: formData.grandfatherName,
         grandmotherName: formData.grandmotherName,
       });
-      console.log("Document successfully written!");
       onClose();
     } catch (error) {
       console.error("Error writing document: ", error);
@@ -102,15 +99,12 @@ export default function DataForm({ onClose }: DataFormProps) {
             />
           </div>
           <div>
-            <Label htmlFor="dateOfBirth">जन्ममिति वि सं</Label>
+            <Label htmlFor="dob">जन्ममिति (वि सं)</Label>
             <NepaliDatePicker
-              className="w-full p-2 border rounded-md"
+              inputClassName="form-control"
               value={formData.dob}
-              onChange={handleDateChange}
-              options={{
-                calenderLocale: "ne",
-                valueLocale: "en",
-              }}
+              onChange={handleNepaliDateChange}
+              options={{ calenderLocale: "ne", valueLocale: "en" }}
             />
           </div>
           <div>
@@ -177,10 +171,17 @@ export default function DataForm({ onClose }: DataFormProps) {
             />
           </div>
           <div className="sticky bottom-0 bg-white pt-4 mt-4 border-t flex justify-end space-x-4">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={loading}
+            >
               रद्द गर्नुहोस्
             </Button>
-            <Button type="submit">पेश गर्नुहोस्</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "सुरुमा..." : "पेश गर्नुहोस्"}
+            </Button>
           </div>
         </form>
       </div>
