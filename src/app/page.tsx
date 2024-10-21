@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import DataForm from "./custom-components/DataForm";
 
-export default function Home() {
+export default function Page() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
