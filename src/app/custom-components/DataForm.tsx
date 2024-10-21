@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
 
 interface DataFormProps {
   onClose: () => void;
@@ -27,9 +29,12 @@ export default function DataForm({ onClose }: DataFormProps) {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleDateChange = (date: string) => {
+    setFormData((prevData) => ({ ...prevData, dob: date }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     onClose();
   };
 
@@ -70,12 +75,15 @@ export default function DataForm({ onClose }: DataFormProps) {
             />
           </div>
           <div>
-            <Label htmlFor="dob">जन्ममिति (वि सं)</Label>
-            <Input
-              id="dob"
-              name="dob"
+            <Label htmlFor="dateOfBirth">जन्ममिति वि सं</Label>
+            <NepaliDatePicker
+              className="w-full p-2 border rounded-md"
               value={formData.dob}
-              onChange={handleChange}
+              onChange={handleDateChange}
+              options={{
+                calenderLocale: "ne",
+                valueLocale: "en",
+              }}
             />
           </div>
           <div>
