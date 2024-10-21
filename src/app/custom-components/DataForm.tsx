@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 interface DataFormProps {
   onClose: () => void;
@@ -24,6 +26,8 @@ export default function DataForm({ onClose }: DataFormProps) {
     grandmotherName: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -33,9 +37,32 @@ export default function DataForm({ onClose }: DataFormProps) {
     setFormData((prevData) => ({ ...prevData, dob: date }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onClose();
+    setLoading(true);
+
+    try {
+      // Add form data to Firestore
+      await addDoc(collection(db, "familyMemberData"), {
+        serialNumber: formData.serialNumber,
+        name: formData.name,
+        address: formData.address,
+        dob: formData.dob,
+        occupation: formData.occupation,
+        sonName: formData.sonName,
+        daughterName: formData.daughterName,
+        fatherName: formData.fatherName,
+        motherName: formData.motherName,
+        grandfatherName: formData.grandfatherName,
+        grandmotherName: formData.grandmotherName,
+      });
+      console.log("Document successfully written!");
+      onClose();
+    } catch (error) {
+      console.error("Error writing document: ", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
