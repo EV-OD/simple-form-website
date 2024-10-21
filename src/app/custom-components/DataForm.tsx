@@ -41,20 +41,9 @@ export default function DataForm({ onClose }: DataFormProps) {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, "familyMembersData"), {
-        serialNumber: formData.serialNumber,
-        name: formData.name,
-        address: formData.address,
-        dob: formData.dob,
-        occupation: formData.occupation,
-        sonName: formData.sonName,
-        daughterName: formData.daughterName,
-        fatherName: formData.fatherName,
-        motherName: formData.motherName,
-        grandfatherName: formData.grandfatherName,
-        grandmotherName: formData.grandmotherName,
-      });
+      await addDoc(collection(db, "familyMembersData"), formData);
       onClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error writing document: ", error);
     } finally {
@@ -63,7 +52,7 @@ export default function DataForm({ onClose }: DataFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white pb-4 mb-4 border-b">
           <h2 className="text-2xl font-bold">डाटा फारम</h2>
