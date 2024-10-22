@@ -12,7 +12,7 @@ export default function Page() {
     <main className="flex min-h-screen flex-col items-center justify-start p-4 sm:p-8 lg:p-24">
       <div className="w-full max-w-7xl">
         <h1 className="text-4xl font-bold mb-8 text-center">
-          नेपाली डाटा फारम
+          लामा कार्की वंशावली डाटा फारम
         </h1>
         <div className="flex justify-center mb-8">
           <Button onClick={() => setIsFormOpen(true)}>
@@ -21,7 +21,7 @@ export default function Page() {
         </div>
         {isFormOpen && <DataForm onClose={() => setIsFormOpen(false)} />}
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">परिवार सदस्यहरूको डाटा</h2>
+          <h2 className="text-2xl font-bold mb-4">पुस्ता -२५</h2>
           <DataTable />
         </div>
       </div>
