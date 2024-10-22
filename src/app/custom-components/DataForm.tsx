@@ -43,7 +43,7 @@ export default function DataForm({ onClose }: DataFormProps) {
     try {
       await addDoc(collection(db, "familyMembersData"), formData);
       onClose();
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Error writing document: ", error);
     } finally {

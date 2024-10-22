@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase";
 import {
   Table,
@@ -33,27 +33,30 @@ export default function DataTable() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const q = query(
-          collection(db, "familyMembersData"),
-          orderBy("serialNumber", "asc")
-        );
-        const querySnapshot = await getDocs(q);
+    const q = query(
+      collection(db, "familyMembersData"),
+      orderBy("serialNumber", "asc")
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
         const data = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as FamilyMember[];
         setFamilyMembers(data);
         setLoading(false);
-      } catch (err) {
+      },
+      (err) => {
         console.error("Error fetching documents: ", err);
         setError("Error fetching data. Please try again later.");
         setLoading(false);
       }
-    };
+    );
 
-    fetchData();
+    // Cleanup the listener when the component is unmounted
+    return () => unsubscribe();
   }, []);
 
   if (loading) {
